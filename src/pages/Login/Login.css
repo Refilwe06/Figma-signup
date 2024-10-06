@@ -1,0 +1,159 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1a1a1a;
+  overflow: hidden; 
+  font-family: 'Cabin';
+}
+
+.container {
+  display: flex;
+  width: 350%; /* Container now takes up 200% of the viewport width */
+  height: 100%;
+  transform: translateX(-35%); /* Move the container left by 25% to center it */
+}
+
+.Left-content {
+  width: 50%; /* Left content now takes up 50% of the 200% width */
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 40px 0 0 40px ;
+}
+
+.Right-content {
+  width: 50%; 
+  background-image: url('/public/Image.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: left 20px; 
+  border-radius: 0 40px 40px 0; 
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logo img {
+  width: 80px;
+  align-self: flex-start; /* Align logo to the left */
+}
+
+.heading img {
+  width: 200px; /* Keep the heading centered and larger */
+  margin: 0 auto; /* Center heading within the header */
+}
+
+.login-details {
+  text-align: center;
+  width: 100%;
+}
+
+.button1 {
+  width: 10%;
+  margin-bottom: 2rem;
+  cursor: pointer;
+  
+}
+
+.separator {
+  width: 40%;
+  margin: 2rem auto;
+ 
+}
+
+form {
+  width: 80%;
+  margin: auto;
+  border-radius: 10px; 
+  height: 40%;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 70%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  height: 30px;
+  
+}
+
+label {
+  font-size: 0.875rem;
+}
+
+#remember-me {
+  margin-right: 0.5rem;
+}
+
+.register-button {
+  width: 70%;
+  height: 40px;
+  padding: 0.75rem;
+  background-color: #000;
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 40px; /* Rounded corners for the button */
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.register-button:hover {
+  background-color: #333;
+}
+
+form p {
+  font-size: 0.875rem;
+}
+
+form span {
+  color: rgb(242, 183, 5);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    width: 100%; /* Stack the content for small screens */
+    transform: translateX(0); /* Reset transform for small screens */
+  }
+
+  .Left-content, .Right-content {
+    width: 100%;
+  }
+}
+
+.google-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.google-button {
+  cursor: pointer;
+  width: 200px; /* Adjust width as needed */
+}
