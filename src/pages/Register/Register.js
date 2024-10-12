@@ -58,23 +58,10 @@ function Register() {
         }
     };
 
-    // Handle Google OAuth success
-    const handleGoogleSuccess = async (response) => {
-        const token = response.credential;
-        try {
-            const res = await axios.post('https://signup-backend-intf.onrender.com/auth/google', { token });
-            console.log('Google authentication successful:', res.data);
-        } catch (err) {
-            const errorMessage = err.response?.data?.message || 'An error occurred';
-            console.error('Error during Google authentication:', errorMessage);
-            setError(errorMessage);
-        }
-    };
-
-    const handleGoogleError = (error) => {
-        console.error('Google login error:', error);
-        setError('Google login failed. Please try again.');
-    };
+    const googleAuth = () => {
+        console.log(process.env.REACT_APP_API_URL)
+        window.open(`${process.env.REACT_APP_API_URL}/auth/google/callback`, '_self');
+    }
 
     return (
         <main>
@@ -97,19 +84,7 @@ function Register() {
 
                         <div className="login-details">
                             <div className="google-button-wrapper">
-                                <GoogleLogin
-                                    onSuccess={handleGoogleSuccess}
-                                    onError={handleGoogleError}
-                                    text='Continue with Google'
-                                    render={(renderProps) => <img
-                                        // src={process.env.PUBLIC_URL + '/GoogleButton.svg'}
-                                        alt=""
-                                        // className="google-button"
-                                        onClick={renderProps.onClick}
-                                        disabled={renderProps.disabled}
-                                    />
-                                    }
-                                />
+                              <img onClick={googleAuth} src={process.env.PUBLIC_URL + '/GoogleButton.svg'} alt='Google Login Button' />
                             </div>
 
                             <div className="separator">
