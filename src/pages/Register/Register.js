@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';
 import './Register.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
     const [formData, setFormData] = useState({
@@ -22,6 +21,7 @@ function Register() {
         }));
     };
 
+    const navigate = useNavigate();
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -43,23 +43,22 @@ function Register() {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:5000/register', formData);
-            console.log('Registration successful', response.data);
-
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, formData);
             // Clear form after successful registration
             setFormData({ name: '', email: '', password: '', rememberMe: false });
             setError(null);
 
-            alert('Registration successful! You can now log in.');
+            alert(response.data?.msg);
+            navigate('../profile');
         } catch (err) {
             const errorMessage = err?.response?.data?.err || 'An error occurred';
             console.error('Error registering user:', errorMessage);
+            alert(errorMessage);
             setError(errorMessage);
         }
     };
 
     const googleAuth = () => {
-        console.log(process.env.REACT_APP_API_URL)
         window.open(`${process.env.REACT_APP_API_URL}/auth/google/callback`, '_self');
     }
 

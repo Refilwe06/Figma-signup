@@ -203,6 +203,8 @@ form a {
 
 .error {
     color: red;
+    margin-bottom: 1rem;
+    font-size: .8rem;
 }
 
 
