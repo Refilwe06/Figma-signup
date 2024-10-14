@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import './Login.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
+import Cookies from 'js-cookie';
 
 function Login() {
+    const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // If the user is already logged in, redirect to the profile page
+        if (user) {
+            navigate('/profile');
+        }
+    }, [user, navigate]);
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -42,13 +54,15 @@ function Login() {
         }
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, formData);
-            console.log('Registration successful', response.data);
-
+            setUser(response.data?.user);
+            Cookies.set('token', response.data?.token);
             // Clear form after successful registration
             setFormData({ email: '', password: '', rememberMe: false });
             setError(null);
 
-            alert('Registration successful! You can now log in.');
+            alert(response.data?.msg);
+            localStorage.setItem('user', JSON.stringify(response.data?.user));
+            navigate('../profile');
         } catch (err) {
             const errorMessage = err?.response?.data?.err || 'An error occurred';
             console.error('Error registering user:', errorMessage);
@@ -57,13 +71,11 @@ function Login() {
     };
 
     const googleAuth = () => {
-        console.log(process.env.REACT_APP_API_URL)
         window.open(`${process.env.REACT_APP_API_URL}/auth/google/callback`, '_self');
     }
 
     return (
         <main>
-
             <div className="container">
                 <div className="left-content">
                     <div className="header">
