@@ -53,6 +53,7 @@ function Register() {
             return;
         }
         try {
+            axios.defaults.withCredentials = true;
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, formData);
             // Clear form after successful registration
             setFormData({ name: '', email: '', password: '', rememberMe: false });

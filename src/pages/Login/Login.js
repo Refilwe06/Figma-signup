@@ -53,6 +53,7 @@ function Login() {
             return;
         }
         try {
+            axios.defaults.withCredentials = true;
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, formData);
             setUser(response.data?.user);
             Cookies.set('token', response.data?.token);
