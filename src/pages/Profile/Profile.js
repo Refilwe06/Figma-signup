@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 import Cookies from 'js-cookie';
+import Logout from '../../components/Logout/Logout';
+import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 
 const Profile = () => {
     const { user, setUser } = useContext(UserContext); // Access user data from context
@@ -54,13 +56,8 @@ const Profile = () => {
 
     return (
         <div className="profile-card">
-            <h2>Profile</h2>
-            <p><strong>Name:</strong> {user?.name || 'N/A'}</p>
-            <p><strong>Email:</strong> {user?.email || 'N/A'}</p>
-            <p><strong>Date Joined:</strong> {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}</p>
-            <button className="logout-button" onClick={handleLogout}>
-                Logout
-            </button>
+            <ProfileInfo user={user} />
+            <Logout handleLogout={handleLogout} />
         </div>
     );
 };
