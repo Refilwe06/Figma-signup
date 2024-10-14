@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import './Register.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
 
 function Register() {
+    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // If the user is already logged in, redirect to the profile page
+        if (user) {
+            navigate('/profile');
+        }
+    }, [user, navigate]);
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -21,7 +32,6 @@ function Register() {
         }));
     };
 
-    const navigate = useNavigate();
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
