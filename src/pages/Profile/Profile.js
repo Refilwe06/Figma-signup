@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import { UserContext } from '../../context/UserContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,8 @@ const Profile = () => {
     const navigate = useNavigate();
     const token = Cookies.get('token');
 
-    const getUser = async () => {
+    // Memoize getUser using useCallback
+    const getUser = useCallback(async () => {
         try {
             const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
 
@@ -30,17 +31,20 @@ const Profile = () => {
             navigate('/login');
             console.error(err);
         }
-    };
+    }, [setUser, navigate]); // Add setUser and navigate to the dependency array
+
+    // useEffect to fetch user data only if token exists and user is not already set
     useEffect(() => {
-        if (!user && token) getUser()
-    }, [token]);
+        if (!user && token) getUser();
+    }, [token, user, getUser]); // Ensure getUser and token are dependencies
+
     const handleLogout = async () => {
         try {
             axios.defaults.withCredentials = true;
             await axios.get(`${process.env.REACT_APP_API_URL}/auth/logout`);
 
             setUser(null); // Clear user data in context
-            localStorage.removeItem('user'); // Clear localstorage user
+            localStorage.removeItem('user'); // Clear localStorage user
             navigate('/login'); // Redirect to login page
         } catch (err) {
             console.error('Logout failed', err);
