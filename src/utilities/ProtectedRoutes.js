@@ -5,7 +5,8 @@ import Cookies from 'js-cookie';
 
 const ProtectedRoutes = () => {
     const { setUser } = useContext(UserContext);
-    const token = Cookies.get('token');
+    const params = new URLSearchParams(window.location.search);
+    const token = Cookies.get('token') || params.get('token');
 
     useEffect(() => {
         if (!token) {

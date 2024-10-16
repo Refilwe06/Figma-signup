@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
@@ -7,9 +7,11 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import ProtectedRoutes from './utilities/ProtectedRoutes';
 import Loader from './components/Loader/Loader';
+import { UserContext } from './context/UserContext';
 
 function App() {
   const [errorMessage, setErrorMessage] = useState(null); // State to hold error messages
+  const { setUser } = useContext(UserContext);
   const getUser = async () => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
@@ -21,8 +23,9 @@ function App() {
           'Content-Type': 'application/json',
         }
       });
-
+      Cookies.set('token', response?.data?.token);
       console.log(response?.data?.msg);
+      setUser(response?.data?.user);
     } catch (err) {
       console.log(err?.data);
       setErrorMessage(err?.response?.data?.msg); // Set the error message state
@@ -45,7 +48,7 @@ function App() {
 
   return (
     <BrowserRouter>
-     <Loader />
+      <Loader />
       <Routes>
         <Route path='/' element={<Register />} exact='true' />
         <Route path='/register' element={<Register />} />
