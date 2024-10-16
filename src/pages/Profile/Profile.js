@@ -11,7 +11,8 @@ import { useLoader } from '../../context/LoaderContext';
 const Profile = () => {
     const { user, setUser } = useContext(UserContext); // Access user data from context
     const navigate = useNavigate();
-    const token = Cookies.get('token');
+    const params = new URLSearchParams(window.location.search);
+    const token = Cookies.get('token') || params.get('token');
     const { showLoader, hideLoader } = useLoader();
 
     // Memoize getUser using useCallback
