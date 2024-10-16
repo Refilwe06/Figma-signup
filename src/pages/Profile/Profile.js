@@ -6,17 +6,19 @@ import './Profile.css';
 import Cookies from 'js-cookie';
 import Logout from '../../components/Logout/Logout';
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
+import { useLoader } from '../../context/LoaderContext';
 
 const Profile = () => {
     const { user, setUser } = useContext(UserContext); // Access user data from context
     const navigate = useNavigate();
     const token = Cookies.get('token');
+    const { showLoader, hideLoader } = useLoader();
 
     // Memoize getUser using useCallback
     const getUser = useCallback(async () => {
         try {
             const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
-
+            showLoader();
             const response = await axios.get(url, {
                 withCredentials: true,
                 headers: {
@@ -32,8 +34,10 @@ const Profile = () => {
             alert(err?.response?.data?.msg); // Set the error message state
             navigate('/login');
             console.error(err);
+        } finally {
+            hideLoader();
         }
-    }, [setUser, navigate]); // Add setUser and navigate to the dependency array
+    }, [setUser, navigate, hideLoader, showLoader]); // Add setUser and navigate to the dependency array
 
     // useEffect to fetch user data only if token exists and user is not already set
     useEffect(() => {
@@ -42,6 +46,7 @@ const Profile = () => {
 
     const handleLogout = async () => {
         try {
+            showLoader();
             axios.defaults.withCredentials = true;
             await axios.get(`${process.env.REACT_APP_API_URL}/auth/logout`);
 
@@ -51,6 +56,8 @@ const Profile = () => {
         } catch (err) {
             console.error('Logout failed', err);
             alert('Logout failed, please try again.');
+        } finally {
+            hideLoader();
         }
     };
 

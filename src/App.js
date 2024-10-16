@@ -6,6 +6,7 @@ import Profile from './pages/Profile/Profile';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import ProtectedRoutes from './utilities/ProtectedRoutes';
+import Loader from './components/Loader/Loader';
 
 function App() {
   const [errorMessage, setErrorMessage] = useState(null); // State to hold error messages
@@ -44,6 +45,7 @@ function App() {
 
   return (
     <BrowserRouter>
+     <Loader />
       <Routes>
         <Route path='/' element={<Register />} exact='true' />
         <Route path='/register' element={<Register />} />

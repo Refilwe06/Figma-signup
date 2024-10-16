@@ -3,10 +3,12 @@ import axios from 'axios';
 import './Register.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
+import { useLoader } from '../../context/LoaderContext';
 
 function Register() {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
+    const { showLoader, hideLoader } = useLoader();
 
     useEffect(() => {
         // If the user is already logged in, redirect to the profile page
@@ -53,6 +55,7 @@ function Register() {
             return;
         }
         try {
+            showLoader();
             axios.defaults.withCredentials = true;
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, formData);
             // Clear form after successful registration
@@ -64,8 +67,9 @@ function Register() {
         } catch (err) {
             const errorMessage = err?.response?.data?.err || 'An error occurred';
             console.error('Error registering user:', errorMessage);
-            alert(errorMessage);
             setError(errorMessage);
+        } finally {
+            hideLoader();
         }
     };
 

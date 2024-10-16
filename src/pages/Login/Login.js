@@ -4,10 +4,12 @@ import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import Cookies from 'js-cookie';
+import { useLoader } from '../../context/LoaderContext';
 
 function Login() {
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
+    const { showLoader, hideLoader } = useLoader();
 
     useEffect(() => {
         // If the user is already logged in, redirect to the profile page
@@ -53,6 +55,7 @@ function Login() {
             return;
         }
         try {
+            showLoader();
             axios.defaults.withCredentials = true;
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, formData);
             setUser(response.data?.user);
@@ -68,6 +71,8 @@ function Login() {
             const errorMessage = err?.response?.data?.err || 'An error occurred';
             console.error('Error registering user:', errorMessage);
             setError(errorMessage);
+        } finally {
+            hideLoader();
         }
     };
 
