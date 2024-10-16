@@ -69,7 +69,7 @@ function Login() {
             navigate('../profile');
         } catch (err) {
             const errorMessage = err?.response?.data?.err || 'An error occurred';
-            console.error('Error registering user:', errorMessage);
+            console.error('Error logging user in:', errorMessage);
             setError(errorMessage);
         } finally {
             hideLoader();
