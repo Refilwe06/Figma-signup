@@ -6,7 +6,7 @@ import { UserContext } from '../../context/UserContext';
 import { useLoader } from '../../context/LoaderContext';
 
 function Register() {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const { showLoader, hideLoader } = useLoader();
 
@@ -56,13 +56,20 @@ function Register() {
         }
         try {
             showLoader();
-            axios.defaults.withCredentials = true;
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            setUser(response.data?.user);
+            // Store token in localStorage instead of cookies
+            localStorage.setItem('jwtToken', response.data?.token);
             // Clear form after successful registration
             setFormData({ name: '', email: '', password: '', rememberMe: false });
             setError(null);
 
             alert(response.data?.msg);
+            localStorage.setItem('user', JSON.stringify(response.data?.user));
             navigate('../profile');
         } catch (err) {
             const errorMessage = err?.response?.data?.err || 'An error occurred';
@@ -79,7 +86,6 @@ function Register() {
 
     return (
         <main>
-
             <div className="container">
                 <div className="left-content">
                     <div className="header">
@@ -98,13 +104,13 @@ function Register() {
 
                         <div className="login-details">
                             <div className="google-button-wrapper">
-                              <img onClick={googleAuth} src={process.env.PUBLIC_URL + '/GoogleButton.svg'} alt='Google Login Button' />
+                                <img onClick={googleAuth} src={process.env.PUBLIC_URL + '/GoogleButton.svg'} alt='Google Login Button' />
                             </div>
 
                             <div className="separator">
-                                <div className='line' ></div>
+                                <div className='line'></div>
                                 <p>Or</p>
-                                <div className='line' ></div>
+                                <div className='line'></div>
                             </div>
                             {error && <p className="error">{error}</p>}
 
@@ -158,7 +164,6 @@ function Register() {
                 </div>
             </div>
         </main>
-
     );
 }
 

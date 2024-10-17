@@ -3,7 +3,6 @@ import axios from 'axios';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
-import Cookies from 'js-cookie';
 import { useLoader } from '../../context/LoaderContext';
 
 function Login() {
@@ -56,16 +55,21 @@ function Login() {
         }
         try {
             showLoader();
-            axios.defaults.withCredentials = true;
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
             setUser(response.data?.user);
-            Cookies.set('token', response.data?.token);
-            // Clear form after successful registration
+            // Store token and user in localStorage
+            localStorage.setItem('jwtToken', response.data?.token);
+            localStorage.setItem('user', JSON.stringify(response.data?.user));
+            
+            // Clear form after successful login
             setFormData({ email: '', password: '', rememberMe: false });
             setError(null);
 
             alert(response.data?.msg);
-            localStorage.setItem('user', JSON.stringify(response.data?.user));
             navigate('../profile');
         } catch (err) {
             const errorMessage = err?.response?.data?.err || 'An error occurred';
@@ -151,7 +155,6 @@ function Login() {
                 </div>
             </div>
         </main>
-
     );
 }
 
