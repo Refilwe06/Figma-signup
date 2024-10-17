@@ -40,7 +40,7 @@ const Profile = () => {
                 return;
             }
 
-            const url = `${process.env.REACT_APP_API_URL}/get-user`;
+            const url = `${process.env.REACT_APP_API_URL}/auth/get-user`;
             showLoader();
 
             const response = await axios.get(url, {

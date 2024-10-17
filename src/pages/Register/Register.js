@@ -56,7 +56,7 @@ function Register() {
         }
         try {
             showLoader();
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, formData, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

@@ -55,7 +55,7 @@ function Login() {
         }
         try {
             showLoader();
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, formData, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -64,7 +64,7 @@ function Login() {
             // Store token and user in localStorage
             localStorage.setItem('jwtToken', response.data?.token);
             localStorage.setItem('user', JSON.stringify(response.data?.user));
-            
+
             // Clear form after successful login
             setFormData({ email: '', password: '', rememberMe: false });
             setError(null);
